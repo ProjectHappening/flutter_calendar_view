@@ -114,6 +114,8 @@ class MonthView<T extends Object?> extends StatefulWidget {
   /// Default value is [WeekDays.monday].
   final WeekDays startDay;
 
+  final ScrollController scrollController;
+
   /// Main [Widget] to display month view.
   const MonthView({
     Key? key,
@@ -136,6 +138,7 @@ class MonthView<T extends Object?> extends StatefulWidget {
     this.onEventTap,
     this.onDateLongPress,
     this.startDay = WeekDays.monday,
+    required this.scrollController,
   }) : super(key: key);
 
   @override
@@ -288,6 +291,7 @@ class MonthViewState<T extends Object?> extends State<MonthView<T>> {
                       ),
                       Expanded(
                         child: SingleChildScrollView(
+                          controller: widget.scrollController,
                           child: SizedBox(
                             height: _height,
                             width: _width,
