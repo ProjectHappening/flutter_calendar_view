@@ -554,23 +554,19 @@ class _MonthPageBuilder<T> extends StatelessWidget {
     required this.startDay,
   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
+  Iterable<Widget> buildCells(
+    BuildContext context,
+    BoxConstraints constraints,
+  ) sync* {
+    final cellWidth = constraints.maxWidth / 7;
     final monthDays = date.datesOfMonths(startDay: startDay);
-    return Container(
-      width: width,
-      height: height,
-      child: GridView.builder(
-        physics: ClampingScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 7,
-          childAspectRatio: cellRatio,
-        ),
-        itemCount: 42,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          final events = controller.getEventsOnDay(monthDays[index]);
-          return GestureDetector(
+    for (var index = 0; index < 42; index++) {
+      final events = controller.getEventsOnDay(monthDays[index]);
+      yield SizedBox(
+        width: cellWidth,
+        child: AspectRatio(
+          aspectRatio: cellRatio,
+          child: GestureDetector(
             onTap: () => onCellTap?.call(events, monthDays[index]),
             onLongPress: () => onDateLongPress?.call(monthDays[index]),
             child: Container(
@@ -589,9 +585,24 @@ class _MonthPageBuilder<T> extends StatelessWidget {
                 monthDays[index].month == date.month,
               ),
             ),
-          );
-        },
-      ),
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      child: LayoutBuilder(builder: (context, constraints) {
+        return Wrap(
+          children: [
+            ...buildCells(context, constraints),
+          ],
+        );
+      }),
     );
   }
 }
