@@ -114,8 +114,6 @@ class MonthView<T extends Object?> extends StatefulWidget {
   /// Default value is [WeekDays.monday].
   final WeekDays startDay;
 
-  final ScrollController scrollController;
-
   /// Main [Widget] to display month view.
   const MonthView({
     Key? key,
@@ -138,7 +136,6 @@ class MonthView<T extends Object?> extends StatefulWidget {
     this.onEventTap,
     this.onDateLongPress,
     this.startDay = WeekDays.monday,
-    required this.scrollController,
   }) : super(key: key);
 
   @override
@@ -289,28 +286,23 @@ class MonthViewState<T extends Object?> extends State<MonthView<T>> {
                           ),
                         ),
                       ),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          controller: widget.scrollController,
-                          child: SizedBox(
-                            height: _height,
-                            width: _width,
-                            child: _MonthPageBuilder<T>(
-                              key: ValueKey(date.toIso8601String()),
-                              onCellTap: widget.onCellTap,
-                              onDateLongPress: widget.onDateLongPress,
-                              width: _width,
-                              height: _height,
-                              controller: controller,
-                              borderColor: widget.borderColor,
-                              borderSize: widget.borderSize,
-                              cellBuilder: _cellBuilder,
-                              cellRatio: widget.cellAspectRatio,
-                              date: date,
-                              showBorder: widget.showBorder,
-                              startDay: widget.startDay,
-                            ),
-                          ),
+                      SizedBox(
+                        height: _height,
+                        width: _width,
+                        child: _MonthPageBuilder<T>(
+                          key: ValueKey(date.toIso8601String()),
+                          onCellTap: widget.onCellTap,
+                          onDateLongPress: widget.onDateLongPress,
+                          width: _width,
+                          height: _height,
+                          controller: controller,
+                          borderColor: widget.borderColor,
+                          borderSize: widget.borderSize,
+                          cellBuilder: _cellBuilder,
+                          cellRatio: widget.cellAspectRatio,
+                          date: date,
+                          showBorder: widget.showBorder,
+                          startDay: widget.startDay,
                         ),
                       ),
                     ],
